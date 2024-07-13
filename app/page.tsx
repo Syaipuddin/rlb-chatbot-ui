@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { ReactElement } from "react";
 import avatar from '../assets/img/avatar.png';
+import Image from "next/image";
 
 const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app/';
 
@@ -233,8 +234,8 @@ function chatboxTarget( e : chatObject, index: number ) {
   return (
     <main className="flex w-screen h-screen flex-col items-center">
       <div className="z-10 w-full min-h-1/5 flex fixed top-0 items-center justify-between font-mono text-sm bg-main md:bg-bubble-main gap-5 p-5 md:w-4/6 lg:mt-5 lg:rounded-t-lg">
-        <div className="profile-photo w-12 h-12 md:w-18 md:h-18 overflow-hidden rounded-full" >
-          <img className="object-contain" src={avatar.src}/>
+        <div className="profile-photo w-12 h-12 md:w-18 md:h-18 overflow-hidden rounded-full relative" >
+          <Image className="object-contain" fill src={avatar.src} alt="profile-picture" />
         </div>
         <p className="text-lg md:text-2xl me-auto font-semibold">Chatbot Melati</p>
         <i className="triple-icon text-2xl md:text-3xl fa fa-ellipsis-vertical px-3"></i>

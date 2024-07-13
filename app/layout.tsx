@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script  from "next/script";
 import "./globals.css";
 
 const inter = Inter({ 
@@ -20,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="https://kit.fontawesome.com/134ecf86d0.js" crossOrigin="anonymous"></script>
+        <Script 
+            src="https://kit.fontawesome.com/134ecf86d0.js" 
+            crossOrigin="anonymous" 
+            strategy="afterInteractive" // Load the script after the page becomes interactive
+          />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
