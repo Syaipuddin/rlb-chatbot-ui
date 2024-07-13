@@ -16,7 +16,7 @@ const config: Config = {
       colors: {
         'main' : "#F5F5F5",
         'bubble-main' : "#D9D9D9",
-        'secondary': "#647FB5",
+        'secondary': "rgba(100, 127, 181, 0.53)",
         'textInputMain': '#F2EEEE',
         'body-secondary':"#F3F3F3"
       }
