@@ -5,7 +5,8 @@ import { ReactElement } from "react";
 import avatar from '../assets/img/avatar.png';
 import Image from "next/image";
 
-const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app/';
+// const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app/';
+const baseUrl : string = "http://127.0.0.1:5000";
 
 interface chatObject {
   id: string | number,
@@ -150,15 +151,6 @@ function chatboxTarget( e : chatObject, index: number ) {
 
   }
 
-  function loadingBubble() {
-
-    return (
-      <div className="h-fit w-fit bg-bubble-main p-2 rounded-md">
-        <i className="w-full bg-blue md:text-xl fa fa-ellipis"></i>
-      </div>
-    )
-  }
-
   async function submitChat(text: String | undefined) {
     console.log("Saya ke submit!")
 
@@ -168,8 +160,6 @@ function chatboxTarget( e : chatObject, index: number ) {
       const roomId = makeid(5);
       localStorage.setItem('roomId', roomId);
     }
-
-    console.log(roomId)
 
     const response = await fetch(`${baseUrl}/ask`, {
       'method': 'POST',
@@ -207,22 +197,8 @@ function chatboxTarget( e : chatObject, index: number ) {
           setIsUpdate(!isUpdate);
 
           setTimeout(() => {
-            setData((prevData) => [
-              { 
-                id: 2,
-                msg: 'Memproses Jawaban...',
-                isCopy: false,
-                isUser: false
-              },
-              ...prevData, 
-            ]);
-            setIsUpdate(!isUpdate);
-          }, 500)
-          
-
-          setTimeout(() => {
             setIsSend(true);
-          }, 1000)
+          }, 500)
           
           }}>
           <i className="text-xl md:text-2xl fa fa-paper-plane text-secondary text-bubble-main"></i>
