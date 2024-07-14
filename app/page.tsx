@@ -5,7 +5,7 @@ import { ReactElement } from "react";
 import avatar from '../assets/img/avatar.png';
 import Image from "next/image";
 
-const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app/';
+const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app';
 // const baseUrl : string = "http://127.0.0.1:5000";
 
 interface chatObject {
