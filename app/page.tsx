@@ -177,33 +177,53 @@ function chatboxTarget( e : chatObject, index: number ) {
   }
   
   function textInput(): ReactElement {  
-    return (
-      
-      <div className="w-full h-[12vh] md:h-[8vh] fixed bottom-0 textInput flex items-center justify-evenly bg-textInputMain md:w-4/6 lg:mb-5 lg:rounded-b-lg">
-        <input onChange={(e)=>setTextBox(e.target.value)} value={textbox} className="h-[65%] w-5/6 bg-bubble-main rounded-xl p-2"/>
-        <div className="W-1/6 cursor-pointer" onClick={() => {
-            setInput(textbox);
-            setTextBox("");
-            setData((prevData) => [
-              { 
-                id: 1,
-                msg: textbox,
-                isCopy: false,
-                isUser: true
-              },
-              ...prevData, 
-            ]);
+    return (   
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        setInput(textbox);
+                setTextBox("");
+                setData((prevData) => [
+                  { 
+                    id: 1,
+                    msg: textbox,
+                    isCopy: false,
+                    isUser: true
+                  },
+                  ...prevData, 
+                ]);
 
-          setIsUpdate(!isUpdate);
+              setIsUpdate(!isUpdate);
 
-          setTimeout(() => {
-            setIsSend(true);
-          }, 500)
-          
-          }}>
-          <i className="text-xl md:text-2xl fa fa-paper-plane text-secondary text-bubble-main"></i>
-        </div>
-      </div>
+              setTimeout(() => {
+                setIsSend(true);
+              }, 500)
+              
+              }
+       } className="w-full h-[12vh] md:h-[8vh] fixed bottom-0 textInput flex items-center justify-evenly bg-textInputMain md:w-4/6 lg:mb-5 lg:rounded-b-lg">
+            <input onChange={(e)=>setTextBox(e.target.value)} value={textbox} className="h-[65%] w-5/6 bg-bubble-main rounded-xl p-2"/>
+            <div className="W-1/6 cursor-pointer" onClick={() => {
+                setInput(textbox);
+                setTextBox("");
+                setData((prevData) => [
+                  { 
+                    id: 1,
+                    msg: textbox,
+                    isCopy: false,
+                    isUser: true
+                  },
+                  ...prevData, 
+                ]);
+
+              setIsUpdate(!isUpdate);
+
+              setTimeout(() => {
+                setIsSend(true);
+              }, 500)
+              
+              }}>
+              <i className="text-xl md:text-2xl fa fa-paper-plane text-secondary text-bubble-main"></i>
+            </div>
+      </form>
     )
   }
 
@@ -216,7 +236,7 @@ function chatboxTarget( e : chatObject, index: number ) {
         <p className="text-lg md:text-2xl me-auto font-semibold">Chatbot Melati</p>
         <i className="triple-icon text-2xl md:text-3xl fa fa-ellipsis-vertical px-3"></i>
       </div>
-      <div className="chatbody w-full flex flex-col-reverse overflow-y-scroll align-items-start gap-3 h-100v py-32 lg:py-28 md:w-4/6 md:bg-body-secondary lg:my-5">
+      <div className="chatbody w-full flex flex-col-reverse overflow-y-scroll align-items-start gap-3 h-[100vh] py-32 lg:py-28 md:w-4/6 md:bg-body-secondary lg:my-5">
           {/* {isCopy ? copiedAlert() : false} */}
           {data.map((e , index) => e.isUser ? chatBoxUser(e) : chatboxTarget(e, index))}
       </div> 
