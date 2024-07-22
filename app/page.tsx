@@ -5,8 +5,8 @@ import { ReactElement } from "react";
 import avatar from '../assets/img/avatar.png';
 import Image from "next/image";
 
-const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app';
-// const baseUrl : string = "http://127.0.0.1:5000";
+// const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app';
+const baseUrl : string = "http://127.0.0.1:5000";
 
 interface chatObject {
   id: string | number,
@@ -104,7 +104,7 @@ function chatboxTarget( e : chatObject, index: number ) {
   );
 
   return (
-    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[18vw] md:max-w-[30vw]">
+    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[23vw] md:max-w-[30vw]">
       <div className="h-fit w-fit bg-bubble-main p-2 rounded-md">
         <p className="w-full bg-blue md:text-xl">{e.msg}</p>
       </div>
@@ -115,9 +115,11 @@ function chatboxTarget( e : chatObject, index: number ) {
 }
 
   async function getChat() {
-    console.log("Saya ke run!")
-
     const roomId = localStorage.getItem('roomId');
+    if (!roomId) {
+      const roomId = makeid(5);
+      localStorage.setItem('roomId', roomId);
+    }
     const response = await fetch(`${baseUrl}/get-chat`, {
       method : 'POST',
       headers: {
