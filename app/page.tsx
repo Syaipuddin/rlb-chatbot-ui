@@ -104,7 +104,7 @@ function chatboxTarget( e : chatObject, index: number ) {
   );
 
   return (
-    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[23vw] md:max-w-[30vw]">
+    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[30vw]">
       <div className="h-fit w-fit bg-bubble-main p-2 rounded-md">
         <p className="w-full bg-blue md:text-xl">{e.msg}</p>
       </div>
@@ -202,7 +202,7 @@ function chatboxTarget( e : chatObject, index: number ) {
               
               }
        } className="w-full h-[12vh] md:h-[8vh] fixed bottom-0 textInput flex items-center justify-evenly bg-textInputMain md:w-4/6 lg:mb-5 lg:rounded-b-lg">
-            <input onChange={(e)=>setTextBox(e.target.value)} value={textbox} className="h-[65%] w-5/6 bg-bubble-main rounded-xl p-2"/>
+            <input onChange={(e)=>setTextBox(e.target.value)} value={textbox} placeholder="Masukkan Pesan" className="h-[65%] w-5/6 bg-bubble-main rounded-xl p-2"/>
             <div className="W-1/6 cursor-pointer" onClick={() => {
                 setInput(textbox);
                 setTextBox("");
