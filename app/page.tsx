@@ -104,7 +104,7 @@ function chatboxTarget( e : chatObject, index: number ) {
   );
 
   return (
-    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[30vw]">
+    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[80vw] md:max-w-[30vw]">
       <div className="h-fit w-fit bg-bubble-main p-2 rounded-md">
         <p className="w-full bg-blue md:text-xl">{e.msg}</p>
       </div>
