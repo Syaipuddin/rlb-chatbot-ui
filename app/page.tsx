@@ -238,7 +238,7 @@ function chatboxTarget( e : chatObject, index: number ) {
         <p className="text-lg md:text-2xl me-auto font-semibold">Chatbot Melati</p>
         <i className="triple-icon text-2xl md:text-3xl fa fa-ellipsis-vertical px-3"></i>
       </div>
-      <div className="chatbody w-full flex flex-col-reverse overflow-y-scroll align-items-start gap-3 h-[100vh] py-32 lg:py-28 md:w-4/6 md:bg-body-secondary lg:my-5">
+      <div className="chatbody w-full flex flex-col-reverse overflow-y-scroll gap-3 h-[100vh] py-32 lg:py-28 md:w-4/6 md:bg-body-secondary lg:my-5">
           {/* {isCopy ? copiedAlert() : false} */}
           {data.map((e , index) => e.isUser ? chatBoxUser(e) : chatboxTarget(e, index))}
       </div> 
