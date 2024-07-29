@@ -112,7 +112,7 @@ function chatboxTarget( e : chatObject, index: number ) {
     }, 5000);
   }
 
-  const sanitizedMsg = DOMPurify.sanitize(e.msg);
+  const sanitizedMsg = DOMPurify.sanitize(e.msg as string);
 
   const tickElement = (
     <div className="h-fit bg-bubble-main p-2 rounded-md cursor-pointer">
