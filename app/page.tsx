@@ -242,9 +242,9 @@ function chatboxTarget( e : chatObject, index: number ) {
 
   function Alert() {
 
-    const list : Array<ReactNode>  = topicList.map((e : String) => {
+    const list : Array<ReactNode>  = topicList.map((e : String, index : number) => {
       return (
-        <li>{e}</li>
+        <li key={index}>{e}</li>
       )
     })
 
