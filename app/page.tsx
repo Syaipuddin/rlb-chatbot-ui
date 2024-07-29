@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { ReactElement } from "react";
 import avatar from '../assets/img/avatar.png';
 import Image from "next/image";
-
+import { setLazyProp } from "next/dist/server/api-utils";
+import DOMPurify from 'dompurify';
 const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app';
 // const baseUrl : string = "http://127.0.0.1:5000";
 
@@ -31,8 +32,27 @@ export default function Home() {
   const [input, setInput] = React.useState<string>();
   const [isSend, setIsSend] = React.useState<Boolean>(false);
   const [isUpdate, setIsUpdate] = React.useState(false);
+  const [isAlert, setIsAlert] = React.useState(true);
+  const [topicList, setTopicList] = React.useState<Array<String>>([
+      "Profil Desa Melati 2",
+      "KTP (Kartu Tanda Penduduk)",
+      "Surat Pindah",
+      "Surat Kedatangan",
+      "Surat Keterangan Lahir",
+      "Kartu Keluarga (KK)",
+      "Surat Keterangan Domisili",
+      "Surat Tanah",
+      "Surat Keterangan Catatan Kepolisian (SKCK)",
+      "Surat Keterangan Tidak Mampu (SKTM)",
+      "Surat Keterangan Usaha (SKU)",
+      "Kartu Identitas Anak (KIA)"
+  ]);
 
-  useEffect(()=> {    
+  useEffect(()=> { 
+    
+    if(!sessionStorage.getItem('roomId')) {
+      sessionStorage.setItem('roomId', makeid(5))
+    }
 
     if (input && isSend) {
       submitChat(input);
@@ -48,7 +68,7 @@ export default function Home() {
     
   }, [isSend, isUpdate])
 
-  function makeid(length: number) {
+  function makeid(length: number) : string {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -64,7 +84,7 @@ export default function Home() {
 function chatBoxUser(e : chatObject): ReactElement {
   
   return (
-    <div key={e.id} className="ms-auto h-fit max-w-72 md:max-w-80 bg-secondary p-2 me-3 rounded-md">
+    <div key={e.id} className="ms-auto h-fit max-w-[80vw] md:max-w-[35vw]  bg-secondary p-2 me-3 rounded-md">
         <p className="w-full bg-blue md:text-xl">{e.msg}</p>
     </div>
   )
@@ -92,6 +112,8 @@ function chatboxTarget( e : chatObject, index: number ) {
     }, 5000);
   }
 
+  const sanitizedMsg = DOMPurify.sanitize(e.msg);
+
   const tickElement = (
     <div className="h-fit bg-bubble-main p-2 rounded-md cursor-pointer">
       <i className="text-md fa fa-square-check text-green-600"></i>
@@ -104,9 +126,9 @@ function chatboxTarget( e : chatObject, index: number ) {
   );
 
   return (
-    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[80vw] md:max-w-[30vw]">
+    <div key={e.id} className="relative flex gap-2 ms-4 max-w-[80vw] md:max-w-[35vw]">
       <div className="h-fit w-fit bg-bubble-main p-2 rounded-md">
-        <p className="w-full bg-blue md:text-xl">{e.msg}</p>
+        <p className="w-full bg-blue md:text-xl" dangerouslySetInnerHTML={{ __html: sanitizedMsg }} />
       </div>
       {e.isCopy ? tickElement : copyElement}
       {/* {isCopy ? copiedAlert() : false} */}
@@ -115,17 +137,13 @@ function chatboxTarget( e : chatObject, index: number ) {
 }
 
   async function getChat() {
-    const roomId = localStorage.getItem('roomId');
-    if (!roomId) {
-      const roomId = makeid(5);
-      localStorage.setItem('roomId', roomId);
-    }
+
     const response = await fetch(`${baseUrl}/get-chat`, {
       method : 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      'body': JSON.stringify({'roomId': roomId})
+      'body': JSON.stringify({'roomId': sessionStorage.getItem('roomId')})
     })
     
     if (response.ok) {
@@ -156,19 +174,12 @@ function chatboxTarget( e : chatObject, index: number ) {
   async function submitChat(text: String | undefined) {
     console.log("Saya ke submit!")
 
-    const roomId = localStorage.getItem('roomId');
-
-    if (!roomId) {
-      const roomId = makeid(5);
-      localStorage.setItem('roomId', roomId);
-    }
-
     const response = await fetch(`${baseUrl}/ask`, {
       'method': 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      'body': JSON.stringify({'msg': text, 'roomId': roomId})
+      'body': JSON.stringify({'msg': text, 'roomId': sessionStorage.getItem('roomId')})
     });
     setInput("");
     
@@ -229,8 +240,36 @@ function chatboxTarget( e : chatObject, index: number ) {
     )
   }
 
+  function Alert() {
+
+    const list : Array<ReactNode>  = topicList.map((e : String) => {
+      return (
+        <li>{e}</li>
+      )
+    })
+
+    return (
+      <div className="absolute w-full h-full z-50 flex flex-col justify-center items-center backdrop-blur-sm">
+        <div className="w-5/6 md:w-3/6 h-fit bg-white rounded-lg p-3 flex flex-col gap-2">
+          <p className="text-2xl font-semibold">Selamat datang di Chatbot Desa Melati 2</p>
+          <p className="block">Anda bisa menanyakan terkait informasi yang ingin diketahui melalui layanan ini. Pertanyaan yang bisa diajukan berkaitan dengan:</p>
+          <div className="">
+            {list}
+          </div>
+          <div onClick={(e)=> {
+            setIsAlert(!isAlert);
+          }} className="w-3/5 h-fit bg-secondary p-2 font-semibold mx-auto rounded-md mt-3 cursor-pointer">
+            <p className="w-fit mx-auto caret-transparent">Ok</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <main className="flex w-screen h-screen flex-col items-center">
+
+      {isAlert && <Alert />}
       <div className="z-10 w-full min-h-1/5 flex fixed top-0 items-center justify-between font-mono text-sm bg-main md:bg-bubble-main gap-5 p-5 md:w-4/6 lg:mt-5 lg:rounded-t-lg">
         <div className="profile-photo w-12 h-12 md:w-18 md:h-18 overflow-hidden rounded-full relative" >
           <Image className="object-contain" fill src={avatar.src} alt="profile-picture" />
