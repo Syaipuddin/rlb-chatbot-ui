@@ -6,8 +6,8 @@ import avatar from '../assets/img/avatar.png';
 import Image from "next/image";
 import { setLazyProp } from "next/dist/server/api-utils";
 import DOMPurify from 'dompurify';
-const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app';
-// const baseUrl : string = "http://127.0.0.1:5000";
+// const baseUrl : string = 'https://geographical-carlota-udinify-f6ff8f77.koyeb.app';
+const baseUrl : string = "http://127.0.0.1:5000";
 
 interface chatObject {
   id: string | number,
@@ -80,6 +80,49 @@ export default function Home() {
     return result;
 }
 
+// Function to handle clicks on the items
+const handleClick = (item : string | undefined) => {
+  setInput(item);
+  setIsSend(true);
+};
+
+// Function to process and render the string
+const renderProcessedString = (str : string) => {
+  // Regular expression to match text inside parentheses
+  const regex = /\(([^)]+)\)/g;
+  
+  // Array to store the parts of the string
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  
+  while ((match = regex.exec(str)) !== null) {
+    let text = match[1];
+    // Add text before the current match
+    if (lastIndex < match.index) {
+      parts.push(<span key={`text-${lastIndex}`}>{DOMPurify.sanitize(str.substring(lastIndex, match.index))}</span>);
+    }
+    // Add the clickable item
+    parts.push(
+      <li 
+        key={`item-${match[1]}`} 
+        onClick={() => handleClick(text)} 
+        style={{ cursor: 'pointer', color: 'blue' }}
+      >
+        {match[1]}
+      </li>
+    );
+    lastIndex = regex.lastIndex;
+  }
+  
+  // Add any remaining text after the last match
+  if (lastIndex < str.length) {
+    parts.push(<span key={`text-${lastIndex}`}>{DOMPurify.sanitize(str.substring(lastIndex))}</span>);
+  }
+  
+  return parts;
+};
+
 
 function chatBoxUser(e : chatObject): ReactElement {
   
@@ -128,7 +171,7 @@ function chatboxTarget( e : chatObject, index: number ) {
   return (
     <div key={e.id} className="relative flex gap-2 ms-4 max-w-[80vw] md:max-w-[35vw]">
       <div className="h-fit w-fit bg-bubble-main p-2 rounded-md">
-        <p className="w-full bg-blue md:text-xl" dangerouslySetInnerHTML={{ __html: sanitizedMsg }} />
+        <p className="w-full bg-blue md:text-xl" /* dangerouslySetInnerHTML={{ __html: (sanitizedMsg) }} */> {renderProcessedString(sanitizedMsg)} </p>
       </div>
       {e.isCopy ? tickElement : copyElement}
       {/* {isCopy ? copiedAlert() : false} */}
